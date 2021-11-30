@@ -1,4 +1,5 @@
 <template>
+  <div>
     <v-card class="mx-auto" max-width="344" light>
       <v-card-title>ログイン</v-card-title>
       <v-card-subtitle
