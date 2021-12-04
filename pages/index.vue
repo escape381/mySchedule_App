@@ -17,9 +17,10 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
+import { LoginStore } from "~/store";
 export default Vue.extend({
   layout: ({ store }) => {
-    return store.state.loggedIn ? "default" : "home";
+    return LoginStore.getLoggedIn ? "default" : "home";
   },
 });
 </script>
