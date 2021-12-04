@@ -9,7 +9,7 @@
       <v-text-field class="mx-4"></v-text-field>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn small>OK</v-btn>
+        <v-btn small @click="Login">OK</v-btn>
         <v-btn small>Cancle</v-btn>
       </v-card-actions>
     </v-card>
@@ -19,8 +19,17 @@
 import Vue from "vue";
 import { LoginStore } from "~/store";
 export default Vue.extend({
-  layout: ({ store }) => {
-    return LoginStore.getLoggedIn ? "default" : "home";
+  layout: () => {
+    // layoutを指定することで、使われる外枠の部分変えられるみたい。
+    return "home";
+  },
+  methods: {
+    Login: function () {
+      // Todo 現在無条件でログイン
+      LoginStore.login();
+      // Todo 行先も適当
+      this.$router.push("/inspire");
+    },
   },
 });
 </script>

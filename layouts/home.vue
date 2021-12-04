@@ -1,6 +1,5 @@
 <template>
   <v-app>
-    このページはログイン前のレイアウト「home.vue」が使用されています。
     <v-main>
       <v-container>
         <Nuxt />
@@ -10,7 +9,8 @@
 </template>
 
 <script>
-// 本来のログインは、別ドメインに準備するなどの対策が必要。
+// Todo Homeっていう名前も微妙...
+// Todo 本来のログインは、別ドメインに準備するなどの対策が必要。
 // 今回はnuxtへの習熟が目的のため、暫定的なログイン画面として実装。
 export default {};
 </script>
