@@ -18,17 +18,22 @@
 <script lang="ts">
 import Vue from "vue";
 import { LoginStore } from "~/store";
+import { Login } from "~/api/login";
 export default Vue.extend({
   layout: () => {
     // layoutを指定することで、使われる外枠の部分変えられるみたい。
     return "home";
   },
   methods: {
-    Login: function () {
-      // Todo 現在無条件でログイン
-      LoginStore.login();
+    Login: async function () {
+      let result = await Login("1", "abcde");
+      if (result) {
+        LoginStore.login();
+        this.$router.push("/inspire");
+      } else {
+        console.log("失敗！！！");
+      }
       // Todo 行先も適当
-      this.$router.push("/inspire");
     },
   },
 });
