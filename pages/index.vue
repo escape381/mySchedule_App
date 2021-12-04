@@ -15,3 +15,11 @@
     </v-card>
   </div>
 </template>
+<script lang="ts">
+import Vue from "vue";
+export default Vue.extend({
+  layout: ({ store }) => {
+    return store.state.loggedIn ? "default" : "home";
+  },
+});
+</script>
