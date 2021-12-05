@@ -1,4 +1,5 @@
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
+import { LoginInfo } from "~/models/LoginInfo";
 
 @Module({
   name: "login",
@@ -6,21 +7,27 @@ import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
   namespaced: true,
 })
 export default class Login extends VuexModule {
-  private loggedIn: boolean = false;
+  private loginInfo: LoginInfo = new LoginInfo();
 
-  public get getLoggedIn() {
-    return this.loggedIn;
+  public get getLoggiedIn() {
+    return this.loginInfo.loggedIn;
+  }
+
+  public get getLoginInfo() {
+    return this.loginInfo;
   }
   @Mutation
-  private setLoggedIn(loggedIn: boolean) {
-    this.loggedIn = loggedIn;
+  private setLoggedIn(info: LoginInfo) {
+    this.loginInfo = info;
   }
   @Action
   public logout() {
-    this.setLoggedIn(false);
+    this.setLoggedIn(new LoginInfo());
   }
   @Action
-  public login() {
-    this.setLoggedIn(true);
+  public login(userId: string) {
+    let info = new LoginInfo();
+    info.setLogin(userId);
+    this.setLoggedIn(info);
   }
 }

@@ -7,7 +7,9 @@
   >
     <template v-slot:top>
       <v-toolbar flat>
-        <v-toolbar-title>＊＊＊＊さんのスケジュール一覧</v-toolbar-title>
+        <v-toolbar-title
+          >{{ LoginInfo.userId }}さんのスケジュール一覧</v-toolbar-title
+        >
         <!-- 垂直線で分割 -->
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
@@ -27,6 +29,9 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
+import { LoginStore } from "~/store";
+import { LoginInfo } from "~/models/LoginInfo";
+
 export default Vue.extend({
   data: () => ({
     showNewDialog: false,
@@ -58,5 +63,10 @@ export default Vue.extend({
       },
     ],
   }),
+  computed: {
+    LoginInfo(): LoginInfo {
+      return LoginStore.getLoginInfo;
+    },
+  },
 });
 </script>
