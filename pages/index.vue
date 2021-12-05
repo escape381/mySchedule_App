@@ -19,7 +19,6 @@
 import Vue from "vue";
 import { LoginStore } from "~/store";
 import { Login } from "~/api/login";
-import { LoginInfo } from "~/models/LoginInfo";
 
 export default Vue.extend({
   // dataは、関数で定義する
@@ -38,7 +37,6 @@ export default Vue.extend({
       let result = await Login(this.userId, this.password);
       if (result) {
         LoginStore.login(this.userId);
-        // Todo 行先も適当
         this.$router.push("/scheduleList");
       } else {
         console.log("失敗！！！");
