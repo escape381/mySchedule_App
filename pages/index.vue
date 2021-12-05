@@ -38,7 +38,7 @@ export default Vue.extend({
       if (result) {
         LoginStore.login();
         // Todo 行先も適当
-        this.$router.push("/inspire");
+        this.$router.push("/scheduleList");
       } else {
         console.log("失敗！！！");
       }
