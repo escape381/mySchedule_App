@@ -20,7 +20,39 @@
             >
           </template>
           <v-card>
-            <v-card-text>XXXX</v-card-text>
+            <v-card-title>
+              <span class="text-h5"></span>
+            </v-card-title>
+            <v-card-text>
+              <v-container>
+                <v-row>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="editedItem.scheduleDate"
+                      label="scheduleDate"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="editedItem.title"
+                      label="Title"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="editedItem.detail"
+                      label="detail"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+              <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+            </v-card-actions>
           </v-card>
         </v-dialog>
       </v-toolbar>
@@ -31,6 +63,7 @@
 import Vue from "vue";
 import { LoginStore } from "~/store";
 import { LoginInfo } from "~/models/LoginInfo";
+import { ScheduleInfo } from "~/models/ScheduleInfo";
 
 export default Vue.extend({
   data: () => ({
@@ -39,7 +72,7 @@ export default Vue.extend({
       {
         text: "予定日",
         align: "start",
-        value: "scheduledDate",
+        value: "scheduleDate",
       },
       {
         text: "タイトル",
@@ -50,22 +83,34 @@ export default Vue.extend({
         value: "detail",
       },
     ],
-    schedules: [
-      {
-        scheduledDate: "2021/01/01 12:30:00",
-        title: "＊＊＊",
-        detail: "メモメモメモ",
-      },
-      {
-        scheduledDate: "2021/01/02 12:30:00",
-        title: "＊＊＊2",
-        detail: "メモメモメモ2",
-      },
-    ],
+    schedules: [] as ScheduleInfo[],
+    editedIndex: -1,
+    editedItem: {} as ScheduleInfo,
   }),
   computed: {
     LoginInfo(): LoginInfo {
       return LoginStore.getLoginInfo;
+    },
+    formTitle(): string {
+      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+    },
+  },
+  methods: {
+    close() {
+      this.showNewDialog = false;
+      this.editedIndex = -1;
+    },
+    save() {
+      if (this.editedIndex > -1) {
+        // save editedItem
+        console.log("save editedItem");
+      } else {
+        // save newItem
+        console.log("save newItem");
+        // 暫定
+        this.schedules.push(this.editedItem);
+      }
+      this.close();
     },
   },
 });
