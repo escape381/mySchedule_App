@@ -13,7 +13,7 @@
         <!-- 垂直線で分割 -->
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
-        <v-dialog v-model="showNewDialog" max-width="500px">
+        <v-dialog v-model="showNewDialog" max-width="700px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on"
               >New Item</v-btn
@@ -26,22 +26,22 @@
             <v-card-text>
               <v-container>
                 <v-row>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col cols="12" sm="6" md="3">
                     <v-text-field
-                      v-model="editedItem.scheduleDate"
-                      label="scheduleDate"
+                      v-model="editedItem.startDate"
+                      label="startDate"
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col cols="12" sm="6" md="3">
                     <v-text-field
-                      v-model="editedItem.title"
-                      label="Title"
+                      v-model="editedItem.endDate"
+                      label="endDate"
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col cols="12" sm="6" md="6">
                     <v-text-field
-                      v-model="editedItem.detail"
-                      label="detail"
+                      v-model="editedItem.content"
+                      label="cntent"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -70,17 +70,17 @@ export default Vue.extend({
     showNewDialog: false,
     headers: [
       {
-        text: "予定日",
         align: "start",
-        value: "scheduleDate",
+        text: "予定日",
+        value: "startDate",
       },
       {
-        text: "タイトル",
-        value: "title",
+        text: "予定日(終了)",
+        value: "endDate",
       },
       {
-        text: "詳細",
-        value: "detail",
+        text: "内容",
+        value: "content",
       },
     ],
     schedules: [] as ScheduleInfo[],
