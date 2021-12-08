@@ -57,6 +57,9 @@
         </v-dialog>
       </v-toolbar>
     </template>
+    <template v-slot:[`item.actions`]="{ item }">
+      <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+    </template>
   </v-data-table>
 </template>
 <script lang="ts">
@@ -82,6 +85,11 @@ export default Vue.extend({
         text: "内容",
         value: "content",
       },
+      {
+        text: "Actions",
+        value: "actions",
+        sortable: false,
+      },
     ],
     schedules: [] as ScheduleInfo[],
     editedIndex: -1,
@@ -100,15 +108,21 @@ export default Vue.extend({
       this.showNewDialog = false;
       this.editedIndex = -1;
     },
+    editItem(item: ScheduleInfo) {
+      this.editedIndex = this.schedules.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.showNewDialog = true;
+    },
     save() {
       if (this.editedIndex > -1) {
-        // save editedItem
         console.log("save editedItem");
+        Object.assign(this.schedules[this.editedIndex], this.editedItem);
+        // Todo call save API
       } else {
         // save newItem
         console.log("save newItem");
-        // 暫定
         this.schedules.push(this.editedItem);
+        // Todo call save API
       }
       this.close();
     },
