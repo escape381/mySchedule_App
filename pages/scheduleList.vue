@@ -28,14 +28,14 @@
                 <v-row>
                   <v-col cols="12" sm="6" md="3">
                     <v-text-field
-                      v-model="editedItem.startDate"
-                      label="startDate"
+                      v-model="editedItem.startDt"
+                      label="startDt"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="3">
                     <v-text-field
-                      v-model="editedItem.endDate"
-                      label="endDate"
+                      v-model="editedItem.endDt"
+                      label="endDt"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="6">
@@ -67,6 +67,7 @@ import Vue from "vue";
 import { LoginStore } from "~/store";
 import { LoginInfo } from "~/models/LoginInfo";
 import { ScheduleInfo } from "~/models/ScheduleInfo";
+import { GetSchedules } from "~/api/schedules";
 
 export default Vue.extend({
   data: () => ({
@@ -75,11 +76,11 @@ export default Vue.extend({
       {
         align: "start",
         text: "予定日",
-        value: "startDate",
+        value: "startDt",
       },
       {
         text: "予定日(終了)",
-        value: "endDate",
+        value: "endDt",
       },
       {
         text: "内容",
@@ -95,6 +96,10 @@ export default Vue.extend({
     editedIndex: -1,
     editedItem: {} as ScheduleInfo,
   }),
+  mounted() {
+    // (property) name: string
+    this.getInitData();
+  },
   computed: {
     LoginInfo(): LoginInfo {
       return LoginStore.getLoginInfo;
@@ -112,6 +117,9 @@ export default Vue.extend({
       this.editedIndex = this.schedules.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.showNewDialog = true;
+    },
+    getInitData: async function () {
+      this.schedules = await GetSchedules(this.LoginInfo.userId);
     },
     save() {
       if (this.editedIndex > -1) {

@@ -1,21 +1,24 @@
 export class ScheduleInfo {
-  startDate: string = "";
-  endDate: string = "";
+  userid: string = "";
+  startDt: string = "";
+  endDt: string = "";
   content: string = "";
 
   constructor() {
-    this.startDate = "";
-    this.endDate = "";
+    this.userid = "";
+    this.startDt = "";
+    this.endDt = "";
     this.content = "";
   }
   public setInfo(
-    startDate: string,
-    endDate: string,
-    title: string,
-    detail: string
+    userid: string,
+    startDt: string,
+    endDt: string,
+    title: string
   ) {
-    this.startDate = startDate;
-    this.endDate = endDate;
+    this.userid = userid;
+    this.startDt = startDt;
+    this.endDt = endDt;
     this.content = title;
   }
 }
