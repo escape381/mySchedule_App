@@ -112,6 +112,7 @@ export default Vue.extend({
     close() {
       this.showNewDialog = false;
       this.editedIndex = -1;
+      this.editedItem = new ScheduleInfo();
     },
     editItem(item: ScheduleInfo) {
       this.editedIndex = this.schedules.indexOf(item);
