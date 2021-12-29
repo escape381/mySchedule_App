@@ -13,3 +13,12 @@ export const GetSchedules = async (id: string): Promise<ScheduleInfo[]> => {
 
   return scheduleInfos;
 };
+
+export const InsertSchedule = async (
+  addInfo: ScheduleInfo
+): Promise<boolean> => {
+  // Todo 戻り値必要(ステータスコードみたいのいるのかな？)
+  const POST_SCHEDULE_API = "http://localhost:28080/message/" + addInfo.userid;
+  const res = await $axios.$post(POST_SCHEDULE_API, addInfo);
+  return true;
+};

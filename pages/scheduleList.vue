@@ -67,7 +67,7 @@ import Vue from "vue";
 import { LoginStore } from "~/store";
 import { LoginInfo } from "~/models/LoginInfo";
 import { ScheduleInfo } from "~/models/ScheduleInfo";
-import { GetSchedules } from "~/api/schedules";
+import { GetSchedules, InsertSchedule } from "~/api/schedules";
 
 export default Vue.extend({
   data: () => ({
@@ -129,8 +129,9 @@ export default Vue.extend({
       } else {
         // save newItem
         console.log("save newItem");
+        this.editedItem.userid = this.LoginInfo.userId;
+        InsertSchedule(this.editedItem);
         this.schedules.push(this.editedItem);
-        // Todo call save API
       }
       this.close();
     },
