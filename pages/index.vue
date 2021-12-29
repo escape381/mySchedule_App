@@ -5,8 +5,19 @@
       <v-card-subtitle
         >ユーザIDとパスワードを入力してください。</v-card-subtitle
       >
-      <v-text-field class="mx-4" v-model="userId"></v-text-field>
-      <v-text-field class="mx-4" v-model="password"></v-text-field>
+      <v-text-field
+        class="mx-4"
+        v-model="userId"
+        maxlength="30"
+        label="ユーザID"
+      ></v-text-field>
+      <v-text-field
+        class="mx-4"
+        v-model="password"
+        maxlength="10"
+        type="password"
+        label="パスワード"
+      ></v-text-field>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn small @click="Login">OK</v-btn>
