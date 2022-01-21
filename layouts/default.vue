@@ -63,6 +63,11 @@ export default {
           title: "scheduleList",
           to: "/scheduleList",
         },
+        {
+          icon: "mdi-chart-bubble",
+          title: "test",
+          to: "/test",
+        },
       ],
       title: "Vuetify.js",
     };
