@@ -59,6 +59,7 @@
     </template>
     <template v-slot:[`item.actions`]="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+      <v-icon small class="mr-2" @click="deleteItem(item)">mdi-delete</v-icon>
     </template>
   </v-data-table>
 </template>
@@ -67,7 +68,12 @@ import Vue from "vue";
 import { LoginStore } from "~/store";
 import { LoginInfo } from "~/models/LoginInfo";
 import { ScheduleInfo } from "~/models/ScheduleInfo";
-import { GetSchedules, InsertSchedule, UpdateSchedule } from "~/api/schedules";
+import {
+  GetSchedules,
+  InsertSchedule,
+  UpdateSchedule,
+  DeleteSchedule,
+} from "~/api/schedules";
 
 export default Vue.extend({
   data: () => ({
@@ -111,6 +117,9 @@ export default Vue.extend({
   methods: {
     close() {
       this.showNewDialog = false;
+      this.clearInfo();
+    },
+    clearInfo() {
       this.editedIndex = -1;
       this.editedItem = new ScheduleInfo();
     },
@@ -119,10 +128,17 @@ export default Vue.extend({
       this.editedItem = Object.assign({}, item);
       this.showNewDialog = true;
     },
+    deleteItem(item: ScheduleInfo) {
+      this.editedIndex = this.schedules.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      DeleteSchedule(this.editedItem);
+      this.schedules.splice(this.editedIndex, 1);
+      this.clearInfo();
+    },
     getInitData: async function () {
       this.schedules = await GetSchedules(this.LoginInfo.userId);
     },
-    save() {
+    async save() {
       if (this.editedIndex > -1) {
         console.log("save editedItem");
         Object.assign(this.schedules[this.editedIndex], this.editedItem);
@@ -131,7 +147,8 @@ export default Vue.extend({
         // save newItem
         console.log("save newItem");
         this.editedItem.userid = this.LoginInfo.userId;
-        InsertSchedule(this.editedItem);
+        let id = await InsertSchedule(this.editedItem);
+        this.editedItem.id = id;
         this.schedules.push(this.editedItem);
       }
       this.close();

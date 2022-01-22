@@ -16,18 +16,27 @@ export const GetSchedules = async (id: string): Promise<ScheduleInfo[]> => {
 
 export const InsertSchedule = async (
   addInfo: ScheduleInfo
-): Promise<boolean> => {
+): Promise<string> => {
   // Todo 戻り値必要(ステータスコードみたいのいるのかな？)
   const POST_SCHEDULE_API = "http://localhost:28080/message/" + addInfo.userid;
   const res = await $axios.$post(POST_SCHEDULE_API, addInfo);
-  return true;
+  return res;
 };
 
 export const UpdateSchedule = async (
   updateInfo: ScheduleInfo
 ): Promise<boolean> => {
   // Todo 戻り値必要(ステータスコードみたいのいるのかな？)
-  const PUT_SCHEDULE_API = "http://localhost:28080/message/" + updateInfo.userid;
+  const PUT_SCHEDULE_API =
+    "http://localhost:28080/message/" + updateInfo.userid;
   const res = await $axios.$put(PUT_SCHEDULE_API, updateInfo);
+  return true;
+};
+export const DeleteSchedule = async (
+  delInfo: ScheduleInfo
+): Promise<boolean> => {
+  // Todo 戻り値必要(ステータスコードみたいのいるのかな？)
+  const DEL_SCHEDULE_API = "http://localhost:28080/message/" + delInfo.userid;
+  const res = await $axios.$delete(DEL_SCHEDULE_API, { data: delInfo });
   return true;
 };
