@@ -22,3 +22,12 @@ export const InsertSchedule = async (
   const res = await $axios.$post(POST_SCHEDULE_API, addInfo);
   return true;
 };
+
+export const UpdateSchedule = async (
+  updateInfo: ScheduleInfo
+): Promise<boolean> => {
+  // Todo 戻り値必要(ステータスコードみたいのいるのかな？)
+  const PUT_SCHEDULE_API = "http://localhost:28080/message/" + updateInfo.userid;
+  const res = await $axios.$put(PUT_SCHEDULE_API, updateInfo);
+  return true;
+};

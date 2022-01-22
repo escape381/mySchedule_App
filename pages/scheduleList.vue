@@ -67,7 +67,7 @@ import Vue from "vue";
 import { LoginStore } from "~/store";
 import { LoginInfo } from "~/models/LoginInfo";
 import { ScheduleInfo } from "~/models/ScheduleInfo";
-import { GetSchedules, InsertSchedule } from "~/api/schedules";
+import { GetSchedules, InsertSchedule, UpdateSchedule } from "~/api/schedules";
 
 export default Vue.extend({
   data: () => ({
@@ -126,7 +126,7 @@ export default Vue.extend({
       if (this.editedIndex > -1) {
         console.log("save editedItem");
         Object.assign(this.schedules[this.editedIndex], this.editedItem);
-        // Todo call save API
+        UpdateSchedule(this.editedItem);
       } else {
         // save newItem
         console.log("save newItem");
