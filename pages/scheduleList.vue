@@ -27,16 +27,90 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="3">
-                    <v-text-field
-                      v-model="editedItem.startDt"
-                      label="startDt"
-                    ></v-text-field>
+                    <v-menu
+                      ref="startDt"
+                      v-model="showStartDtDlg"
+                      :close-on-content-click="false"
+                      :return-value.sync="editedItem.startDt"
+                      transition="scale-transition"
+                      offset-y
+                      min-width="auto"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                          v-model="editedItem.startDt"
+                          label="startDt"
+                          prepend-icon="mdi-calendar"
+                          readonly
+                          v-bind="attrs"
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker
+                        v-model="editedItem.startDt"
+                        no-title
+                        scrollable
+                      >
+                        <v-spacer></v-spacer>
+                        <v-btn
+                          text
+                          color="primary"
+                          @click="showStartDtDlg = false"
+                        >
+                          Cancel
+                        </v-btn>
+                        <v-btn
+                          text
+                          color="primary"
+                          @click="$refs.startDt.save(editedItem.startDt)"
+                        >
+                          OK
+                        </v-btn>
+                      </v-date-picker>
+                    </v-menu>
                   </v-col>
                   <v-col cols="12" sm="6" md="3">
-                    <v-text-field
-                      v-model="editedItem.endDt"
-                      label="endDt"
-                    ></v-text-field>
+                    <v-menu
+                      ref="endDt"
+                      v-model="showEndDtDlg"
+                      :close-on-content-click="false"
+                      :return-value.sync="editedItem.endDt"
+                      transition="scale-transition"
+                      offset-y
+                      min-width="auto"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                          v-model="editedItem.endDt"
+                          label="endDt"
+                          prepend-icon="mdi-calendar"
+                          readonly
+                          v-bind="attrs"
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker
+                        v-model="editedItem.endDt"
+                        no-title
+                        scrollable
+                      >
+                        <v-spacer></v-spacer>
+                        <v-btn
+                          text
+                          color="primary"
+                          @click="showEndDtDlg = false"
+                        >
+                          Cancel
+                        </v-btn>
+                        <v-btn
+                          text
+                          color="primary"
+                          @click="$refs.endDt.save(editedItem.endDt)"
+                        >
+                          OK
+                        </v-btn>
+                      </v-date-picker>
+                    </v-menu>
                   </v-col>
                   <v-col cols="12" sm="6" md="6">
                     <v-text-field
@@ -67,6 +141,7 @@
 import Vue from "vue";
 import { LoginStore } from "~/store";
 import { LoginInfo } from "~/models/LoginInfo";
+import "@/node_modules/vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css";
 import { ScheduleInfo } from "~/models/ScheduleInfo";
 import {
   GetSchedules,
@@ -78,6 +153,8 @@ import {
 export default Vue.extend({
   data: () => ({
     showNewDialog: false,
+    showStartDtDlg: false,
+    showEndDtDlg: false,
     headers: [
       {
         align: "start",
@@ -122,6 +199,8 @@ export default Vue.extend({
     clearInfo() {
       this.editedIndex = -1;
       this.editedItem = new ScheduleInfo();
+      this.editedItem.startDt = new Date().toISOString().substr(0, 10);
+      this.editedItem.endDt = new Date().toISOString().substr(0, 10);
     },
     editItem(item: ScheduleInfo) {
       this.editedIndex = this.schedules.indexOf(item);
