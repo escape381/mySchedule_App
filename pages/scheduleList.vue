@@ -215,7 +215,14 @@ export default Vue.extend({
       this.clearInfo();
     },
     getInitData: async function () {
-      this.schedules = await GetSchedules(this.LoginInfo.userId);
+      this.$nuxt.$loading.start();
+      setTimeout(async () => {
+        // loadingダイアログの機能を確認するため、
+        // わざとsetTimeoutで適当に時間を稼いでからGetSchedulesをしている
+        // https://codelikes.com/custom-loading-nuxt/#toc4
+        this.schedules = await GetSchedules(this.LoginInfo.userId);
+        this.$nuxt.$loading.finish();
+      }, 3000);
     },
     async save() {
       if (this.editedIndex > -1) {

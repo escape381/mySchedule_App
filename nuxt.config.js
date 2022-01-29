@@ -43,7 +43,7 @@ export default {
     "@nuxtjs/axios",
     "@nuxtjs/vuetify",
   ],
-
+  loading: "./components/Loading.vue",
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
 
