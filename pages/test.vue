@@ -2,13 +2,18 @@
   <div>
     <v-btn @click="Err500">Err500</v-btn>
     <v-btn @click="Err404">Err404</v-btn>
+    <sampleExtend></sampleExtend>
   </div>
 </template>
 <script lang="ts">
 import Vue from "vue";
 import { Err404, Err500 } from "~/api/test";
+import sampleExtend from "~/components/sampleExtend.vue";
 
 export default Vue.extend({
+  components: {
+    sampleExtend,
+  },
   // dataは、関数で定義する
   data: function () {
     return {
