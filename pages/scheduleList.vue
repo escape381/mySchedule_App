@@ -119,13 +119,24 @@
                     ></v-text-field>
                   </v-col>
                 </v-row>
+                <v-row>
+                  <v-col cols="12" sm="12" md="12">
+                    <span>{{ editedItemError }}</span>
+                  </v-col>
+                </v-row>
               </v-container>
             </v-card-text>
 
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+              <v-btn
+                color="blue darken-1"
+                text
+                @click="save"
+                :disabled="isSaveDisabled"
+                >Save</v-btn
+              >
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -178,10 +189,33 @@ export default Vue.extend({
     schedules: [] as ScheduleInfo[],
     editedIndex: -1,
     editedItem: {} as ScheduleInfo,
+    editedItemError: "",
   }),
+  watch: {
+    editedItem: {
+      handler: function (val: ScheduleInfo) {
+        if (!val.startDt) {
+          this.editedItemError = "予定日を入力してください。";
+          return;
+        }
+        if (!val.endDt) {
+          this.editedItemError = "予定日(終了)を入力してください。";
+          return;
+        }
+        if (Date.parse(val.startDt) > Date.parse(val.endDt)) {
+          this.editedItemError =
+            "予定日(終了)は、開始日以降を入力してください。";
+          return;
+        }
+        this.editedItemError = "";
+      },
+      deep: true,
+    },
+  },
   mounted() {
     // (property) name: string
     this.getInitData();
+    this.clearInfo();
   },
   computed: {
     LoginInfo(): LoginInfo {
@@ -189,6 +223,9 @@ export default Vue.extend({
     },
     formTitle(): string {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
+    },
+    isSaveDisabled(): boolean {
+      return Boolean(this.editedItemError);
     },
   },
   methods: {
@@ -242,3 +279,12 @@ export default Vue.extend({
   },
 });
 </script>
+<style scoped>
+span {
+  height: 20px;
+  font-size: 14px;
+  color: red;
+  width: 90%;
+  display: block;
+}
+</style>
