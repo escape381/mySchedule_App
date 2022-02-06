@@ -19,7 +19,10 @@ export default {
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
   },
-
+  env: {
+    SCHEDULE_ENDPOINT:
+      process.env.SCHEDULE_ENDPOINT || "http://localhost:28080",
+  },
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [],
 

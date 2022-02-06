@@ -3,7 +3,7 @@ import Axios from "axios";
 
 export const Err500 = async (ms: number): Promise<string> => {
   try {
-    const ERR500_API = "http://localhost:28080/waitErr500/" + `${ms}`;
+    const ERR500_API = `${process.env.SCHEDULE_ENDPOINT}/waitErr500/${ms}`;
     const res = await $axios.$get<string>(ERR500_API);
     console.log("Catchを通過していません500");
     console.log(res);
@@ -22,7 +22,7 @@ export const Err500 = async (ms: number): Promise<string> => {
 };
 export const Err404 = async (ms: number): Promise<string> => {
   try {
-    const ERR404_API = "http://localhost:28080/waitErr404/" + `${ms}`;
+    const ERR404_API = `${process.env.SCHEDULE_ENDPOINT}/waitErr404/${ms}`;
     const res = await $axios.$get<string>(ERR404_API);
     console.log("Catchを通過していません404");
     console.log(res);
