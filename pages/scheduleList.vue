@@ -13,132 +13,17 @@
         <!-- 垂直線で分割 -->
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
-        <v-dialog v-model="showNewDialog" max-width="700px">
+        <v-dialog v-model="showEditDialog" max-width="700px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on"
               >New Item</v-btn
             >
           </template>
-          <v-card>
-            <v-card-title>
-              <span class="text-h5"></span>
-            </v-card-title>
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col cols="12" sm="6" md="3">
-                    <v-menu
-                      ref="startDt"
-                      v-model="showStartDtDlg"
-                      :close-on-content-click="false"
-                      :return-value.sync="editedItem.startDt"
-                      transition="scale-transition"
-                      offset-y
-                      min-width="auto"
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="editedItem.startDt"
-                          label="startDt"
-                          prepend-icon="mdi-calendar"
-                          readonly
-                          v-bind="attrs"
-                          v-on="on"
-                        ></v-text-field>
-                      </template>
-                      <v-date-picker
-                        v-model="editedItem.startDt"
-                        no-title
-                        scrollable
-                      >
-                        <v-spacer></v-spacer>
-                        <v-btn
-                          text
-                          color="primary"
-                          @click="showStartDtDlg = false"
-                        >
-                          Cancel
-                        </v-btn>
-                        <v-btn
-                          text
-                          color="primary"
-                          @click="$refs.startDt.save(editedItem.startDt)"
-                        >
-                          OK
-                        </v-btn>
-                      </v-date-picker>
-                    </v-menu>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="3">
-                    <v-menu
-                      ref="endDt"
-                      v-model="showEndDtDlg"
-                      :close-on-content-click="false"
-                      :return-value.sync="editedItem.endDt"
-                      transition="scale-transition"
-                      offset-y
-                      min-width="auto"
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="editedItem.endDt"
-                          label="endDt"
-                          prepend-icon="mdi-calendar"
-                          readonly
-                          v-bind="attrs"
-                          v-on="on"
-                        ></v-text-field>
-                      </template>
-                      <v-date-picker
-                        v-model="editedItem.endDt"
-                        no-title
-                        scrollable
-                      >
-                        <v-spacer></v-spacer>
-                        <v-btn
-                          text
-                          color="primary"
-                          @click="showEndDtDlg = false"
-                        >
-                          Cancel
-                        </v-btn>
-                        <v-btn
-                          text
-                          color="primary"
-                          @click="$refs.endDt.save(editedItem.endDt)"
-                        >
-                          OK
-                        </v-btn>
-                      </v-date-picker>
-                    </v-menu>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="6">
-                    <v-text-field
-                      v-model="editedItem.content"
-                      label="content"
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col cols="12" sm="12" md="12">
-                    <span>{{ editedItemError }}</span>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card-text>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-              <v-btn
-                color="blue darken-1"
-                text
-                @click="save"
-                :disabled="isSaveDisabled"
-                >Save</v-btn
-              >
-            </v-card-actions>
-          </v-card>
+          <edit-dialog-card
+            :editedItem="editedItem"
+            v-on:clickSave="onSave"
+            v-on:clickCancel="close"
+          ></edit-dialog-card>
         </v-dialog>
       </v-toolbar>
     </template>
@@ -154,6 +39,7 @@ import { LoginStore } from "~/store";
 import { LoginInfo } from "~/models/LoginInfo";
 import "@/node_modules/vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css";
 import { ScheduleInfo } from "~/models/ScheduleInfo";
+import EditDialogCard from "~/components/EditDialogCard.vue";
 import {
   GetSchedules,
   InsertSchedule,
@@ -162,10 +48,11 @@ import {
 } from "~/api/schedules";
 
 export default Vue.extend({
+  components: {
+    EditDialogCard,
+  },
   data: () => ({
-    showNewDialog: false,
-    showStartDtDlg: false,
-    showEndDtDlg: false,
+    showEditDialog: false,
     headers: [
       {
         align: "start",
@@ -189,29 +76,7 @@ export default Vue.extend({
     schedules: [] as ScheduleInfo[],
     editedIndex: -1,
     editedItem: {} as ScheduleInfo,
-    editedItemError: "",
   }),
-  watch: {
-    editedItem: {
-      handler: function (val: ScheduleInfo) {
-        if (!val.startDt) {
-          this.editedItemError = "予定日を入力してください。";
-          return;
-        }
-        if (!val.endDt) {
-          this.editedItemError = "予定日(終了)を入力してください。";
-          return;
-        }
-        if (Date.parse(val.startDt) > Date.parse(val.endDt)) {
-          this.editedItemError =
-            "予定日(終了)は、開始日以降を入力してください。";
-          return;
-        }
-        this.editedItemError = "";
-      },
-      deep: true,
-    },
-  },
   mounted() {
     // (property) name: string
     this.getInitData();
@@ -224,13 +89,10 @@ export default Vue.extend({
     formTitle(): string {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
-    isSaveDisabled(): boolean {
-      return Boolean(this.editedItemError);
-    },
   },
   methods: {
     close() {
-      this.showNewDialog = false;
+      this.showEditDialog = false;
       this.clearInfo();
     },
     clearInfo() {
@@ -242,7 +104,7 @@ export default Vue.extend({
     editItem(item: ScheduleInfo) {
       this.editedIndex = this.schedules.indexOf(item);
       this.editedItem = Object.assign({}, item);
-      this.showNewDialog = true;
+      this.showEditDialog = true;
     },
     deleteItem(item: ScheduleInfo) {
       this.editedIndex = this.schedules.indexOf(item);
@@ -260,6 +122,12 @@ export default Vue.extend({
         this.schedules = await GetSchedules(this.LoginInfo.userId);
         this.$nuxt.$loading.finish();
       }, 3000);
+    },
+    async onSave(params: ScheduleInfo) {
+      console.log("onSave");
+      console.log(params);
+      this.editedItem = params;
+      await this.save();
     },
     async save() {
       if (this.editedIndex > -1) {
@@ -279,12 +147,3 @@ export default Vue.extend({
   },
 });
 </script>
-<style scoped>
-span {
-  height: 20px;
-  font-size: 14px;
-  color: red;
-  width: 90%;
-  display: block;
-}
-</style>
